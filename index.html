@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Modern Static Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#7c3aed; --glass: rgba(255,255,255,0.04);
+      --radius:14px; --gap:20px; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:linear-gradient(180deg,#071027 0%,var(--bg) 100%); color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      padding:48px; display:flex; align-items:center; justify-content:center;
+    }
+    .wrap{
+      width:100%; max-width:1100px; background:radial-gradient(1000px 200px at 10% 0%, rgba(124,58,237,0.08), transparent 20%), linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius:18px; padding:32px; box-shadow: 0 10px 40px rgba(2,6,23,0.6); backdrop-filter: blur(6px);
+    }
+    header{display:flex;gap:16px;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4f46e5);display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:18px}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:0;color:var(--muted)}
+
+    .controls{display:flex;gap:10px;align-items:center}
+    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:10px;color:var(--muted);font-weight:600;cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#4f46e5);border:none;color:white}
+
+    main{margin-top:22px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--gap)}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--radius);overflow:hidden;border:1px solid rgba(255,255,255,0.03);box-shadow: 0 6px 18px rgba(2,6,23,0.5);display:flex;flex-direction:column}
+    .thumb{position:relative;padding-top:56%;overflow:hidden}
+    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+    .card:hover .thumb img{transform:scale(1.05)}
+    .meta{padding:14px}
+    .title{font-weight:700;margin:0;margin-bottom:6px}
+    .desc{color:var(--muted);font-size:13px;margin:0}
+
+    footer{margin-top:18px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
+
+    /* modal / lightbox */
+    .lightbox{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.7);z-index:60}
+    .lightbox.open{display:flex}
+    .lightbox .inner{max-width:90vw;max-height:90vh;border-radius:12px;overflow:hidden;box-shadow:0 30px 80px rgba(2,6,23,0.8);background:#071026}
+    .lightbox img{display:block;max-width:100%;height:auto;max-height:85vh}
+    .close{position:absolute;top:18px;right:18px;background:rgba(0,0,0,0.4);border-radius:10px;padding:8px;color:#fff;border:none;cursor:pointer}
+
+    @media (max-width:520px){body{padding:18px}.brand h1{font-size:16px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">MS</div>
+        <div>
+          <h1>Modern Static Gallery</h1>
+          <p class="lead">A minimal responsive static site using external images</p>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn">Share</button>
+        <button class="btn primary" id="viewAll">View Gallery</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="grid" id="gallery">
+        <!-- Card 1 -->
+        <figure class="card">
+          <div class="thumb"><img src="https://i.guim.co.uk/img/media/1e3e5e2f6f3501befb629560ffe172a54ce3f016/139_98_2145_1287/master/2145.jpg?width=465&dpr=1&s=none&crop=none" alt="City skyline at dusk"></div>
+          <figcaption class="meta">
+            <div class="title">City Dusk</div>
+            <p class="desc">Photo credit: The Guardian (external)</p>
+          </figcaption>
+        </figure>
+
+        <!-- Card 2 -->
+        <figure class="card">
+          <div class="thumb"><img src="https://www.atlanticrecords.com/sites/g/files/g2000015596/files/styles/artist_image_detail/public/2023-02/Pdiddy.jpg?itok=iQy4ar7K" alt="Portrait of P Diddy"></div>
+          <figcaption class="meta">
+            <div class="title">Artist Portrait</div>
+            <p class="desc">Photo credit: Atlantic Records</p>
+          </figcaption>
+        </figure>
+
+        <!-- Card 3 -->
+        <figure class="card">
+          <div class="thumb"><img src="https://m.media-amazon.com/images/I/31RQ7zGCm4L._UXNaN_FMjpg_QL85_.jpg" alt="Retro movie poster"></div>
+          <figcaption class="meta">
+            <div class="title">Retro Poster</div>
+            <p class="desc">Photo credit: Amazon (external)</p>
+          </figcaption>
+        </figure>
+
+        <!-- Card 4 -->
+        <figure class="card">
+          <div class="thumb"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Tommy_Shelby.jpg/250px-Tommy_Shelby.jpg" alt="Tommy Shelby portrait"></div>
+          <figcaption class="meta">
+            <div class="title">Tommy Shelby</div>
+            <p class="desc">Photo credit: Wikipedia</p>
+          </figcaption>
+        </figure>
+
+      </div>
+
+      <footer>
+        <div>4 images · Static HTML • No frameworks</div>
+        <div>Built with ❤️ — open the images to view full size</div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-hidden="true">
+    <button class="close" id="lbClose" aria-label="Close">✕</button>
+    <div class="inner" id="lbInner"></div>
+  </div>
+
+  <script>
+    // Simple lightbox: click images to open larger view
+    const gallery = document.getElementById('gallery');
+    const lightbox = document.getElementById('lightbox');
+    const lbInner = document.getElementById('lbInner');
+    const lbClose = document.getElementById('lbClose');
+
+    gallery.addEventListener('click', (e) => {
+      const img = e.target.closest('img');
+      if(!img) return;
+      openLightbox(img.src, img.alt);
+    });
+
+    function openLightbox(src, alt){
+      lbInner.innerHTML = `<img src="${src.replace(/\?width=465.*$/,'')}" alt="${alt}">`;
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+    }
+
+    function closeLightbox(){
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden','true');
+      lbInner.innerHTML = '';
+    }
+
+    lbClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
+
+    document.getElementById('viewAll').addEventListener('click', ()=>{
+      // open first image as quick preview
+      const first = gallery.querySelector('img');
+      if(first) openLightbox(first.src, first.alt);
+    });
+
+    // keyboard
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); });
+  </script>
+</body>
+</html>
